@@ -37,12 +37,28 @@ public class PersonController {
 
     @PutMapping(path = "/{id}")
     public Person wholeUpdate(@PathVariable Long id, @RequestBody PersonDto dto) {
-        return service.wholeUpdatePerson(id, dto);
+        return service.update(id, person -> {
+            person.setFirstName(dto.getFirstName());
+            person.setLastName(dto.getLastName());
+            person.setNickname(dto.getNickname());
+            return person;
+        });
     }
 
     @PatchMapping(path = "/{id}")
     public Person partialUpdate(@PathVariable Long id, @RequestBody PersonDto dto) {
-        return service.partialUpdatePerson(id, dto);
+        return service.update(id, person -> {
+            if (null != dto.getFirstName()) {
+                person.setFirstName(dto.getFirstName());
+            }
+            if (null != dto.getLastName()) {
+                person.setLastName(dto.getLastName());
+            }
+            if (null != dto.getNickname()) {
+                person.setNickname(dto.getNickname());
+            }
+            return person;
+        });
     }
 
     @DeleteMapping(path = "/{id}")
